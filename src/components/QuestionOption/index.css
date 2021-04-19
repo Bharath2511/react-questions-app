@@ -1,0 +1,57 @@
+/* Write your code here. */
+
+.options-card {
+  background-color: #f4f1ea;
+  width: 30%;
+  padding: 25px;
+  border-radius: 10px;
+  min-height: 200px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.selected {
+  background-color: #0e8684;
+  color: #ffffff;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.coffee-cup {
+  width: 40px;
+  height: 40px;
+  align-self: center;
+}
+
+.card-title {
+  color: #2e353d;
+}
+
+.card-description {
+  color: #64748b;
+  max-width: 250px;
+}
+
+.highlight-title {
+  color: #ffffff;
+}
+.highlight-description {
+  color: #ffffff;
+}
+
+@media screen and (max-width: 767px) {
+  .card-title {
+    font-size: 18px;
+  }
+  .coffee-cup {
+    width: 25px;
+    height: 25px;
+  }
+  .options-card {
+    width: 230px;
+  }
+}

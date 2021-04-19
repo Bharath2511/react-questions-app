@@ -1,0 +1,50 @@
+.coffee-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-container {
+  padding: 20px;
+  height: 45vh;
+  width: 100vw;
+  background-image: url('https://assets.ccbp.in/frontend/react-js/coffee-planner-bg.png');
+  background-size: cover;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.image-container-content {
+  width: 400px;
+  color: #ffffff;
+}
+
+.heading {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.description {
+  font-weight: 500;
+}
+
+.questions-and-answers-container {
+  padding: 20px 40px 20px 40px;
+}
+
+.button-container {
+  text-align: center;
+  margin: 25px;
+}
+
+.button {
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 15px 10px 15px 10px;
+  background-color: #0e8684;
+  color: #ffffff;
+  font-weight: 800;
+  border-radius: 6px;
+}
