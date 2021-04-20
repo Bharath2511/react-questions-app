@@ -1,67 +1,35 @@
 import {Component} from 'react'
-import './index.css'
+
 import QuestionOption from '../QuestionOption'
 
-const questions = [
-  {
-    questionType: 'DRINK_TYPE',
-    option: '',
-  },
-  {
-    questionType: 'COFFEE_TYPE',
-    option: '',
-  },
-  {
-    questionType: 'QUANTITY',
-    option: '',
-  },
-  {
-    questionType: 'GRIND_TYPE',
-    option: '',
-  },
-  {
-    questionType: 'DELIVER_TYPE',
-    option: '',
-  },
-]
+import './index.css'
 
 class CoffeePlannerQuestion extends Component {
-  state = {
-    selectedCoffeePlan: ['', '', '', '', ''],
-    showSummary: false,
-  }
-
-  selectedOption = optionData => {
-    this.setState(previousState => {})
-  }
-
-  renderQuestionDetails = questionData => {
-    const {questionTitle, optionsData, questionType} = questionData
-    const {selectedOptionId} = this.state
-    return (
-      <div className="question-container">
-        <h1 className="question">{questionTitle}</h1>
-        <div className="option-container">
-          {optionsData.map(option => {
-            const {id} = option
-            return (
-              <QuestionOption
-                key={id}
-                selectedOptionId={selectedOptionId}
-                optionData={option}
-                questionType={questionType}
-                selectedOption={this.selectedOption}
-              />
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
-
   render() {
-    const {questionData} = this.props
-    return <>{this.renderQuestionDetails(questionData)}</>
+    const {
+      getSelectedOption,
+      questionData,
+      updateSelectedCoffeePlan,
+    } = this.props
+    const {questionTitle, optionsData, questionType} = questionData
+    const selectedOption = getSelectedOption(questionType)
+
+    return (
+      <li className="coffee-planner-question-item">
+        <h1 className="question">{questionTitle}</h1>
+        <ul className="options-list-container">
+          {optionsData.map(questionOption => (
+            <QuestionOption
+              optionData={questionOption}
+              key={questionOption.id}
+              questionType={questionType}
+              selectedOption={selectedOption}
+              updateSelectedCoffeePlan={updateSelectedCoffeePlan}
+            />
+          ))}
+        </ul>
+      </li>
+    )
   }
 }
 

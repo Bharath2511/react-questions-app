@@ -1,62 +1,130 @@
 import {Component} from 'react'
+
 import CoffeePlannerQuestion from '../CoffeePlannerQuestion'
+
 import './index.css'
 
 class CoffeePlanner extends Component {
   state = {
-    selectedOption: -1,
-    selectedCoffeePlan: [],
+    selectedCoffeePlan: ['', '', '', '', ''],
+    showSummary: false,
   }
 
-  getSelectedOption = optionId => {
-    this.setState({selectedOption: optionId, selectedCoffeePlan: ''})
+  setShowSummary = value => {
+    this.setState({showSummary: value})
   }
 
-  updateSelectedCoffeePlan = optionTitle => {
+  isAllOptionsSelected = () => {
     const {selectedCoffeePlan} = this.state
-    const updatedCoffeePlan = [...selectedCoffeePlan, optionTitle]
-    this.setState(previousState => ({
-      selectedOption: previousState.selectedOption,
-      selectedCoffeePlan: updatedCoffeePlan,
-    }))
+
+    return selectedCoffeePlan.filter(plan => plan === '').length === 0
   }
 
-  renderCoffeePlanQuestion = () => {
+  renderSummarySection = () => {
+    const {selectedCoffeePlan, showSummary} = this.state
+
+    if (showSummary) {
+      return (
+        <div className="summary-container">
+          {this.isAllOptionsSelected() ? (
+            <p className="summary">
+              “I Drink my coffee as
+              <span className="selected-value"> {selectedCoffeePlan[0]}</span>,
+              with a
+              <span className="selected-value"> {selectedCoffeePlan[1]} </span>
+              type of bean.
+              <span className="selected-value"> {selectedCoffeePlan[2]} </span>
+              ground ala
+              <span className="selected-value"> {selectedCoffeePlan[3]}</span>,
+              sent to me
+              <span className="selected-value"> {selectedCoffeePlan[4]}</span>.”
+            </p>
+          ) : (
+            <p className="summary">
+              Kindly select options for all the questions.
+            </p>
+          )}
+        </div>
+      )
+    }
+    return null
+  }
+
+  updateSelectedCoffeePlan = (questionType, selectedOption) => {
+    const {coffeePlannerData} = this.props
+    const {selectedCoffeePlan} = this.state
+    const questionIndex = coffeePlannerData.findIndex(
+      coffeePlan => questionType === coffeePlan.questionType,
+    )
+    const newSelectedCoffeePlan = [...selectedCoffeePlan]
+    newSelectedCoffeePlan[questionIndex] = selectedOption
+    this.setState({selectedCoffeePlan: [...newSelectedCoffeePlan]})
+    this.setShowSummary(false)
+  }
+
+  getSelectedOption = questionType => {
+    const {coffeePlannerData} = this.props
+    const {selectedCoffeePlan} = this.state
+    const questionIndex = coffeePlannerData.findIndex(
+      coffeeQuestion => questionType === coffeeQuestion.questionType,
+    )
+    return selectedCoffeePlan[questionIndex]
+  }
+
+  renderCoffeePlannerQuestions = () => {
     const {coffeePlannerData} = this.props
 
-    return coffeePlannerData.map(eachPlan => {
-      const {id} = eachPlan
-      return (
-        <CoffeePlannerQuestion
-          key={id}
-          questionData={eachPlan}
-          getSelectedOption={this.getSelectedOption}
-          updateSelectedCoffeePlan={this.updateSelectedCoffeePlan}
-        />
-      )
-    })
+    return (
+      <ul className="coffee-planner-questions-list">
+        {coffeePlannerData.map(coffeeQuestion => (
+          <CoffeePlannerQuestion
+            getSelectedOption={this.getSelectedOption}
+            key={coffeeQuestion.id}
+            questionData={coffeeQuestion}
+            updateSelectedCoffeePlan={this.updateSelectedCoffeePlan}
+          />
+        ))}
+      </ul>
+    )
   }
+
+  onClickCreateMyPlan = () => {
+    this.setShowSummary(true)
+  }
+
+  renderBodySection = () => (
+    <div className="coffee-planner-body">
+      {this.renderCoffeePlannerQuestions()}
+      <div className="button-container">
+        <button
+          type="button"
+          className="create-my-plan-button"
+          onClick={this.onClickCreateMyPlan}
+        >
+          Create my plan!
+        </button>
+      </div>
+      {this.renderSummarySection()}
+    </div>
+  )
+
+  renderHeaderSection = () => (
+    <div className="header-section">
+      <div className="coffee-planner-details-container">
+        <h1 className="heading">Create a Plan</h1>
+        <p className="description">
+          We offer an assortment of the best artesian coffees from the globe
+          delivered fresh to the door create your plan with this
+        </p>
+      </div>
+    </div>
+  )
 
   render() {
     return (
-      <div className="coffee-container">
-        <div className="image-container">
-          <div className="image-container-content">
-            <h1 className="heading">Create a Plan</h1>
-            <p className="description">
-              We offer an assortment of the best artesian coffees from the globe
-              delivered fresh to the door create your plan with this
-            </p>
-          </div>
-        </div>
-        <div className="questions-and-answers-container">
-          {this.renderCoffeePlanQuestion()}
-          <div className="button-container">
-            <button className="button" type="button">
-              Create my plan!
-            </button>
-          </div>
-        </div>
+      <div className="app-container">
+        {this.renderHeaderSection()}
+        {this.renderBodySection()}
       </div>
     )
   }
